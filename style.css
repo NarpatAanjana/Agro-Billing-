@@ -1,4 +1,4 @@
-/* Clean optimization for printing layouts */
+/* Optimization print setup rule adjustments */
 @media print {
     .no-print {
         display: none !important;
@@ -6,12 +6,26 @@
     body {
         background: #ffffff !important;
         color: #000000 !important;
-    }
-    #invoiceContainer {
-        box-shadow: none !important;
-        border: none !important;
         padding: 0 !important;
+        margin: 0 !important;
+    }
+    .printable-bill {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        padding: 15mm !important;
         width: 100% !important;
         max-width: 100% !important;
+        margin: 0 !important;
+        page-break-inside: avoid;
     }
+}
+
+/* Custom adjustments for precise tabular structures */
+.printable-bill table th, 
+.printable-bill table td {
+    border-right: 1px solid #000000;
+}
+.printable-bill table th:last-child, 
+.printable-bill table td:last-child {
+    border-right: none;
 }
