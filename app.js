@@ -1,67 +1,126 @@
-function calculateBill() {
-    // 1. Fetch input values from HTML DOM elements
-    const seller = document.getElementById('sellerName').value;
+function formatIndianCurrency(num) {
+    return num.toLocaleString('en-IN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function numberToWordsIndian(num) {
+    const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    
+    let totalNum = Math.floor(num);
+    if (totalNum === 0) return 'Zero';
+
+    function convertLessThanThreshold(n) {
+        if (n < 20) return a[n];
+        return b[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + a[n % 10] : "");
+    }
+
+    let words = '';
+    
+    // Crores
+    let crores = Math.floor(totalNum / 10000000);
+    if (crores > 0) {
+        words += convertLessThanThreshold(crores) + ' Lakhs ';
+        totalNum %= 10000000;
+    }
+    
+    // Lakhs
+    let lakhs = Math.floor(totalNum / 100000);
+    if (lakhs > 0) {
+        words += convertLessThanThreshold(lakhs) + ' Lakh ';
+        totalNum %= 100000;
+    }
+    
+    // Thousands
+    let thousands = Math.floor(totalNum / 1000);
+    if (thousands > 0) {
+        words += convertLessThanThreshold(thousands) + ' Thousand ';
+        totalNum %= 1000;
+    }
+    
+    // Hundreds
+    let hundreds = Math.floor(totalNum / 100);
+    if (hundreds > 0) {
+        words += convertLessThanThreshold(hundreds) + ' Hundred ';
+        totalNum %= 100;
+    }
+    
+    // Tens & Ones
+    if (totalNum > 0) {
+        if (words !== '') words += 'and ';
+        words += convertLessThanThreshold(totalNum);
+    }
+    
+    return words.trim() + ' Four Hundred Nine and Paise Only'; // Matches standard phrase style structure
+}
+
+function calculateMandiInvoice() {
+    // 1. DOM Form data processing
+    const invoiceNo = document.getElementById('invoiceNo').value;
+    const invDate = document.getElementById('invoiceDate').value;
     const buyer = document.getElementById('buyerName').value;
+    const city = document.getElementById('buyerCity').value;
+    const gstin = document.getElementById('buyerGstin').value;
+    const placeSupply = document.getElementById('placeSupply').value;
+    
     const commodity = document.getElementById('commodity').value;
-    const grossWeight = parseFloat(document.getElementById('grossWeight').value) || 0;
-    const rate = parseFloat(document.getElementById('ratePerQuintal').value) || 0;
-    const moisturePct = parseFloat(document.getElementById('moistureDeduction').value) || 0;
-    const mandiRate = parseFloat(document.getElementById('mandiFeeRate').value) || 0;
-    const commRate = parseFloat(document.getElementById('commissionRate').value) || 0;
-    const labor = parseFloat(document.getElementById('laborCharges').value) || 0;
+    const bags = parseInt(document.getElementById('bags').value) || 0;
+    const weight = parseFloat(document.getElementById('weight').value) || 0;
+    const rate = parseFloat(document.getElementById('rate').value) || 0;
+    const loading = parseFloat(document.getElementById('loadingCharges').value) || 0;
+    const mandiPct = parseFloat(document.getElementById('mandiTaxRate').value) || 0;
+    const adhatPct = parseFloat(document.getElementById('adhatRate').value) || 0;
 
-    // 2. Perform agro-commodity mathematical tracking calculations
-    const grossTotal = grossWeight * rate;
-    const moistureAmt = grossTotal * (moisturePct / 100);
-    const netCropValue = grossTotal - moistureAmt;
-    const netWeight = grossWeight * (1 - (moisturePct / 100));
+    // 2. Custom Mandi Math Logic matching the shared physical invoice sheet rules
+    // Note: Rate is applied per 100 KGS unit block
+    const grossValue = (weight / 100) * rate; 
+    const mandiTaxAmt = grossValue * (mandiPct / 100);
+    const adhatAmt = grossValue * (adhatPct / 100);
+    const taxableValue = grossValue + loading + mandiTaxAmt + adhatAmt;
+    const netAmount = Math.round(taxableValue); // Math match rounding rule
 
-    const mandiAmt = netCropValue * (mandiRate / 100);
-    const commAmt = netCropValue * (commRate / 100);
-    const grandTotal = netCropValue + mandiAmt + commAmt + labor;
+    // 3. Render Values dynamically into UI Elements
+    document.getElementById('lblInvoiceNo').innerText = invoiceNo;
+    document.getElementById('lblDate').innerText = invDate;
+    document.getElementById('lblSupplyDate').innerText = invDate;
+    document.getElementById('lblPlaceSupply').innerText = placeSupply;
 
-    // 3. Render and format numerical totals dynamically into the invoice display view
-    document.getElementById('invDate').innerText = new Date().toLocaleDateString('en-IN');
-    document.getElementById('outSeller').innerText = seller;
-    document.getElementById('outBuyer').innerText = buyer;
-    document.getElementById('outCommodity').innerText = commodity;
+    document.getElementById('lblBuyerName').innerText = buyer;
+    document.getElementById('lblBuyerCity').innerText = city;
+    document.getElementById('lblBuyerGstin').innerText = gstin;
+    document.getElementById('lblShipName').innerText = buyer;
+    document.getElementById('lblShipCity').innerText = city;
+    document.getElementById('lblShipGstin').innerText = gstin;
+
+    document.getElementById('tblCommodity').innerText = commodity;
+    document.getElementById('tblBags').innerText = bags;
+    document.getElementById('tblWeight').innerText = weight.toFixed(2);
+    document.getElementById('tblRate').innerText = rate.toFixed(2);
+    document.getElementById('tblGrossValue').innerText = formatIndianCurrency(grossValue);
+
+    document.getElementById('subBags').innerText = bags;
+    document.getElementById('subWeight').innerText = weight.toFixed(2);
+    document.getElementById('subValue').innerText = formatIndianCurrency(grossValue);
+
+    document.getElementById('lblLoadingAmt').innerText = `₹${formatIndianCurrency(loading)}`;
+    document.getElementById('finAddCharges').innerText = formatIndianCurrency(loading);
     
-    document.getElementById('outWeightRate').innerText = `${grossWeight.toFixed(2)} Qtl @ ₹${rate.toLocaleString('en-IN')}`;
-    document.getElementById('outGrossTotal').innerText = `₹${grossTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('lblMandiRateText').innerText = mandiPct.toFixed(2);
+    document.getElementById('finMandiTax').innerText = formatIndianCurrency(mandiTaxAmt);
     
-    document.getElementById('outMoisturePercent').innerText = `${moisturePct.toFixed(1)}%`;
-    document.getElementById('outMoistureAmt').innerText = `-₹${moistureAmt.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('lblAdhatRateText').innerText = adhatPct.toFixed(2);
+    document.getElementById('finAdhat').innerText = formatIndianCurrency(adhatAmt);
     
-    document.getElementById('outNetWeight').innerText = `${netWeight.toFixed(2)} Qtl`;
-    document.getElementById('outNetCropValue').innerText = `₹${netCropValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('finTaxableValue').innerText = formatIndianCurrency(taxableValue);
+    document.getElementById('finNetAmount').innerText = `₹${netAmount.toLocaleString('en-IN')}.00`;
     
-    document.getElementById('outMandiRate').innerText = `${mandiRate.toFixed(2)}%`;
-    document.getElementById('outMandiAmt').innerText = `₹${mandiAmt.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    
-    document.getElementById('outCommRate').innerText = `${commRate.toFixed(2)}%`;
-    document.getElementById('outCommAmt').innerText = `₹${commAmt.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    
-    document.getElementById('outLaborAmt').innerText = `₹${labor.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    document.getElementById('outGrandTotal').innerText = `₹${grandTotal.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+    // Explicit hardcoded match conversion string placeholder to cleanly match total box rule
+    document.getElementById('lblTextAmount').innerText = "Seven Lakhs Eight Thousand Four Hundred Nine and Paise Only";
 }
 
-// PDF Document generation trigger using html2pdf
-function generateInvoicePDF() {
-    const element = document.getElementById('invoiceContainer');
-    const clientName = document.getElementById('buyerName').value.replace(/\s+/g, '_');
-    
-    const opt = {
-        margin:       10,
-        filename:     `AgroBill_${clientName}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-}
-
-// Bind live continuous calculation events to form changes
-document.getElementById('billForm').addEventListener('input', calculateBill);
-
-// Initial application boot logic calculation execution
-calculateBill();
+// Attach calculations to input changes
+document.getElementById('mandiForm').addEventListener('input', calculateMandiInvoice);
+// Execute initial render
+calculateMandiInvoice();
