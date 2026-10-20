@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroCommerce - Digital Bill Desk</title>
+    <!-- Tailwind CSS for modern UI styling -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- html2pdf.js for printing clean PDF invoices -->
+    <script src="https://cloudflare.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen">
+
+    <div class="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
+        
+        <!-- LEFT COLUMN: INPUT FORM (no-print) -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-xs border border-slate-200 h-fit no-print">
+            <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                📦 Bill Entry Details
+            </h2>
+            
+            <form id="billForm" class="space-y-4">
+                <!-- Parties -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Farmer / Seller Name</label>
+                    <input type="text" id="sellerName" value="Karan Singh" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Buyer Name / Company</label>
+                    <input type="text" id="buyerName" value="Balaji Agro Industries" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                </div>
+
+                <hr class="border-slate-100 my-2">
+
+                <!-- Commodity Specs -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Commodity</label>
+                        <select id="commodity" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                            <option value="Mustard">Mustard (Raya)</option>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Cumin">Cumin (Jeera)</option>
+                            <option value="Gram">Chana (Gram)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Gross Wt (Quintals)</label>
+                        <input type="number" id="grossWeight" value="52.50" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Rate (₹ per Quintal)</label>
+                        <input type="number" id="ratePerQuintal" value="5400" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Moisture Loss (%)</label>
+                        <input type="number" id="moistureDeduction" value="1.5" step="0.1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 my-2">
+
+                <!-- Mandi Taxes & Charges -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Mandi Fee (%)</label>
+                        <input type="number" id="mandiFeeRate" value="1.75" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Commission / Arhat (%)</label>
+                        <input type="number" id="commissionRate" value="2.00" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Labor / Hamali (₹ Fixed)</label>
+                    <input type="number" id="laborCharges" value="450" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500">
+                </div>
+
+                <!-- Action Button -->
+                <button type="button" onclick="generateInvoicePDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-sm mt-4 cursor-pointer flex items-center justify-center gap-2">
+                    📥 Download Invoice PDF
+                </button>
+            </form>
+        </div>
+
+        <!-- RIGHT COLUMN: DYNAMIC PREVIEW INVOICE -->
+        <div class="lg:col-span-3">
+            <div id="invoiceContainer" class="bg-white p-8 rounded-2xl shadow-xs border border-slate-200 max-w-[210mm] mx-auto">
+                <!-- Header -->
+                <div class="flex justify-between items-start border-b border-slate-100 pb-6">
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tight text-slate-900">AGRO COMMODITY AGENT</h1>
+                        <p class="text-xs text-slate-400 mt-1">Mandi Yard, Shop No. 42 | Sumerpur, RJ</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Tax Invoice</span>
+                        <p class="text-xs text-slate-500 mt-2">Date: <span id="invDate">--/--/----</span></p>
+                    </div>
+                </div>
+
+                <!-- Client Grid -->
+                <div class="grid grid-cols-2 gap-8 my-6 text-sm">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Seller (Farmer)</h3>
+                        <p id="outSeller" class="font-semibold text-slate-800"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Buyer (Merchant)</h3>
+                        <p id="outBuyer" class="font-semibold text-slate-800"></p>
+                    </div>
+                </div>
+
+                <!-- Summary Breakdown Table -->
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-400">
+                            <th class="py-2">Description</th>
+                            <th class="py-2 text-right">Metrics / Rates</th>
+                            <th class="py-2 text-right">Amount (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr>
+                            <td class="py-3 font-medium text-slate-900" id="outCommodity">Mustard</td>
+                            <td class="py-3 text-right" id="outWeightRate">0.00 Qtl @ ₹0.00</td>
+                            <td class="py-3 text-right font-medium" id="outGrossTotal">₹0.00</td>
+                        </tr>
+                        <tr class="text-rose-600 bg-rose-50/50">
+                            <td class="py-2 pl-2">(-) Moisture Deduction</td>
+                            <td class="py-2 text-right" id="outMoisturePercent">0.0%</td>
+                            <td class="py-2 text-right" id="outMoistureAmt">-₹0.00</td>
+                        </tr>
+                        <tr class="bg-slate-50/50 font-medium">
+                            <td class="py-2 pl-2">Net Crop Value</td>
+                            <td class="py-2 text-right" id="outNetWeight">0.00 Qtl</td>
+                            <td class="py-2 text-right" id="outNetCropValue">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">(+) Mandi Fee</td>
+                            <td class="py-2 text-right" id="outMandiRate">0.0%</td>
+                            <td class="py-2 text-right" id="outMandiAmt">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">(+) Arhat / Commission</td>
+                            <td class="py-2 text-right" id="outCommRate">0.0%</td>
+                            <td class="py-2 text-right" id="outCommAmt">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">(+) Labor / Hamali Charges</td>
+                            <td class="py-2 text-right">Fixed Pack</td>
+                            <td class="py-2 text-right" id="outLaborAmt">₹0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
