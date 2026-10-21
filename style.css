@@ -1,31 +1,563 @@
-/* Optimization print setup rule adjustments */
-@media print {
-    .no-print {
-        display: none !important;
-    }
-    body {
-        background: #ffffff !important;
-        color: #000000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    .printable-bill {
-        border: 1px solid #000000 !important;
-        box-shadow: none !important;
-        padding: 15mm !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        page-break-inside: avoid;
-    }
+
+* {
+  box-sizing: border-box;
 }
 
-/* Custom adjustments for precise tabular structures */
-.printable-bill table th, 
-.printable-bill table td {
-    border-right: 1px solid #000000;
+body {
+  margin: 0;
+  background: #e7e7e7;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
 }
-.printable-bill table th:last-child, 
-.printable-bill table td:last-child {
-    border-right: none;
+
+.toolbar {
+  max-width: 1000px;
+  margin: 16px auto;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+}
+
+.toolbar strong {
+  margin-right: auto;
+  font-size: 16px;
+}
+
+.toolbar button {
+  padding: 9px 14px;
+  border: 1px solid #777;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.invoice {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  padding: 8mm 7mm 6mm;
+  background: white;
+  border: 1px solid #aaa;
+}
+
+input,
+textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 1px 3px;
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #999;
+  outline: none;
+}
+
+.top-strip {
+  min-height: 12mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2px 5px;
+  border: 1px solid #777;
+  font-weight: bold;
+}
+
+.top-strip > div {
+  width: 60%;
+}
+
+.top-strip label {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.top-strip input {
+  font-weight: bold;
+}
+
+.top-strip .mobile {
+  width: 30%;
+  justify-content: flex-end;
+}
+
+.seller-header {
+  min-height: 24mm;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #777;
+  border-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.seller-name {
+  text-align: center;
+  font-size: 19px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.seller-type,
+.seller-address,
+.seller-license {
+  text-align: center;
+  font-size: 11px;
+}
+
+.document-bar {
+  min-height: 7mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 2px 4px;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.document-title {
+  text-align: center;
+  text-decoration: underline;
+}
+
+.document-bar > span {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.details-column {
+  padding: 7px 5px;
+  min-width: 0;
+}
+
+.details-column + .details-column {
+  border-left: 1px solid #777;
+}
+
+.field-row {
+  min-height: 6mm;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.field-row > label:first-child {
+  width: 36%;
+  flex-shrink: 0;
+}
+
+.field-row > span {
+  flex-shrink: 0;
+}
+
+.field-row > input {
+  flex: 1;
+}
+
+.field-row .due-label,
+.field-row .bilty-label {
+  width: auto;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.party-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.party {
+  min-width: 0;
+  min-height: 34mm;
+  position: relative;
+  padding: 5px 7px 19px;
+}
+
+.party + .party {
+  border-left: 1px solid #777;
+}
+
+.party h3 {
+  margin: -5px -7px 6px;
+  padding: 4px;
+  text-align: center;
+  font-size: 11px;
+  border-bottom: 1px solid #777;
+}
+
+.party-name {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.party > label {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.party > label input {
+  flex: 1;
+}
+
+.party-gstin {
+  position: absolute;
+  bottom: 2px;
+  left: 7px;
+  right: 7px;
+  font-weight: bold;
+}
+
+.party textarea {
+  min-height: 18px;
+}
+
+.goods-section {
+  width: 100%;
+}
+
+#goodsTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#goodsTable th,
+#goodsTable td {
+  padding: 4px 2px;
+  border: 1px solid #777;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+#goodsTable th {
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+#goodsTable td {
+  text-align: right;
+}
+
+#goodsTable td:nth-child(2) {
+  text-align: left;
+}
+
+#goodsTable tbody tr {
+  height: 72mm;
+}
+
+#goodsTable tbody input,
+#goodsTable tbody select {
+  width: 100%;
+  padding: 2px 0;
+  border: 1px solid transparent;
+  text-align: right;
+  font-size: 10px;
+}
+
+#goodsTable tbody td:nth-child(2) input {
+  text-align: left;
+}
+
+#goodsTable tfoot th {
+  height: 6mm;
+  vertical-align: middle;
+}
+
+#goodsTable .action-col {
+  width: 7%;
+}
+
+.remove-item {
+  padding: 2px;
+  border: 0;
+  background: #eee;
+  cursor: pointer;
+}
+
+.bottom-section {
+  display: grid;
+  grid-template-columns: 2fr 1.08fr;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.left-bottom {
+  min-width: 0;
+  border-right: 1px solid #777;
+}
+
+.charges-heading {
+  padding: 6px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.charge-line {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 0.7fr;
+  align-items: center;
+  padding: 2px 8px 8px;
+  gap: 4px;
+}
+
+.charge-line input:last-child {
+  text-align: right;
+}
+
+.remarks {
+  min-height: 20mm;
+  padding: 7px;
+  border-top: 1px solid #777;
+}
+
+.remarks textarea {
+  min-height: 12mm;
+}
+
+.bank {
+  min-height: 15mm;
+  padding: 6px;
+  border-top: 1px solid #777;
+}
+
+.bank strong {
+  display: block;
+  margin-bottom: 3px;
+  text-decoration: underline;
+}
+
+.bank input {
+  font-weight: bold;
+}
+
+.right-bottom {
+  min-width: 0;
+}
+
+.summary-row {
+  min-height: 7mm;
+  display: grid;
+  grid-template-columns: 58% 42%;
+  align-items: center;
+  border-bottom: 1px solid #aaa;
+}
+
+.summary-row > span {
+  padding: 4px;
+}
+
+.summary-row > span + span {
+  text-align: right;
+  border-left: 1px solid #aaa;
+}
+
+.summary-row input {
+  display: inline-block;
+  width: 32px;
+  padding: 0;
+  text-align: right;
+}
+
+.taxable-row {
+  font-weight: bold;
+}
+
+.round-row {
+  min-height: 12mm;
+}
+
+.net-row {
+  min-height: 10mm;
+  display: grid;
+  grid-template-columns: 58% 42%;
+  align-items: center;
+  font-size: 14px;
+  border-top: 1px solid #777;
+}
+
+.net-row > * {
+  padding: 5px;
+}
+
+.net-row strong:last-child {
+  text-align: right;
+  border-left: 1px solid #777;
+}
+
+.amount-words {
+  min-height: 8mm;
+  padding: 6px;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.invoice-footer {
+  min-height: 26mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid #777;
+  border-top: 0;
+}
+
+.terms p {
+  margin: 3px 0 7px;
+  line-height: 1.35;
+}
+
+.signature {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+}
+
+.signature-space {
+  min-height: 20mm;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.eoe {
+  padding: 3px 5px;
+  text-align: right;
+}
+
+/* A4 print output */
+@page {
+  size: A4 portrait;
+  margin: 5mm;
+}
+
+@media print {
+  body {
+    background: white;
+    font-size: 10px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .invoice {
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  input,
+  textarea {
+    border-color: transparent !important;
+    outline: none !important;
+    resize: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  #goodsTable tbody tr {
+    height: 72mm;
+  }
+
+  .top-strip,
+  .seller-header,
+  .document-bar,
+  .details-grid,
+  .party-grid,
+  #goodsTable,
+  .bottom-section,
+  .amount-words,
+  .invoice-footer {
+    break-inside: avoid;
+  }
+
+  #goodsTable thead,
+  #goodsTable tfoot {
+    display: table-row-group;
+  }
+
+  .remove-item {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .invoice {
+    width: 100%;
+    padding: 8px;
+    overflow-x: auto;
+  }
+
+  .seller-name {
+    font-size: 15px;
+  }
+
+  .document-bar {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .document-title,
+  .document-bar > span {
+    text-align: left;
+  }
+
+  .details-grid,
+  .party-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-column + .details-column,
+  .party + .party {
+    border-left: 0;
+    border-top: 1px solid #777;
+  }
+
+  .goods-section {
+    overflow-x: auto;
+  }
+
+  #goodsTable {
+    min-width: 720px;
+  }
+
+  .bottom-section {
+    grid-template-columns: 1fr;
+  }
+
+  .left-bottom {
+    border-right: 0;
+    border-bottom: 1px solid #777;
+  }
 }
