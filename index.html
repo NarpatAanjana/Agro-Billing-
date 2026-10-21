@@ -8,11 +8,19 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="toolbar no-print">
-    <strong>Trading Invoice System</strong>
-    <button onclick="addItem()">+ Add Item</button>
-    <button onclick="window.print()">Print Invoice</button>
-  </div>
+ 
+<div class="toolbar no-print">
+  <strong>Trading Invoice System</strong>
+  <button type="button" onclick="newBill()">+ New Bill</button>
+  <button type="button" onclick="addItem()">+ Add Item</button>
+  <button type="button" onclick="saveBill()">Save Bill</button>
+  <select id="savedBills" aria-label="Open a saved bill">
+    <option value="">Open Saved Bill...</option>
+  </select>
+  <button type="button" onclick="loadSelectedBill()">Open</button>
+  <button type="button" onclick="window.print()">Print Invoice</button>
+</div>
+
 
   <main class="invoice">
     <div class="top-strip">
