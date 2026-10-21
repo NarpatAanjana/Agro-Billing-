@@ -561,3 +561,43 @@ textarea:focus {
     border-bottom: 1px solid #777;
   }
 }
+
+/* Invoice toolbar controls */
+.toolbar {
+  flex-wrap: wrap;
+}
+
+.toolbar button,
+.toolbar select {
+  padding: 8px 10px;
+  border: 1px solid #777;
+  background: #f5f5f5;
+  color: #222;
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolbar select {
+  max-width: 190px;
+}
+
+/* Match the class used in index.html */
+.stamp-space {
+  min-height: 20mm;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Keep editing controls out of printed bills */
+@media print {
+  .toolbar,
+  .no-print {
+    display: none !important;
+  }
+
+  #goodsTable tbody tr {
+    height: 72mm;
+  }
+}
