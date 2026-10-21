@@ -1,164 +1,243 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mandi Bill of Supply - Dashboard</title>
-    <!-- Tailwind CSS Engine -->
-    <script src="https://jsdelivr.net"></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Credit Memo - Bill of Supply</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen">
+<body>
+  <div class="toolbar no-print">
+    <strong>Trading Invoice System</strong>
+    <button onclick="addItem()">+ Add Item</button>
+    <button onclick="window.print()">Print Invoice</button>
+  </div>
 
-    <!-- LEFT AUTOMATION PANEL (Hidden on Print) -->
-    <div class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 xl:grid-cols-5 gap-6">
-        
-        <div class="xl:col-span-2 bg-white p-5 rounded-xl shadow-xs border border-slate-200 h-fit no-print">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-1.5">📝 Mandi Bill Data Entry</h2>
-                <button type="button" onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition cursor-pointer flex items-center gap-1.5 shadow-sm">
-                    🖨️ Print / Save PDF
-                </button>
-            </div>
-            
-            <form id="mandiForm" class="space-y-3 text-xs">
-                <!-- Meta Info -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Invoice No.</label>
-                        <input type="text" id="invoiceNo" value="BB/26-27/633" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Date</label>
-                        <input type="text" id="invoiceDate" value="15/10/2026" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
+  <main class="invoice">
+    <div class="top-strip">
+      <div>
+        <label>GSTIN: <input id="sellerGSTIN" value="YOUR GSTIN"></label>
+        <label>PAN No.: <input id="sellerPAN" value="YOUR PAN"></label>
+      </div>
+      <label class="mobile">Mob.: <input id="sellerMobile" value="YOUR MOBILE"></label>
+    </div>
 
-                <!-- Parties -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Billed To (Receiver)</label>
-                        <input type="text" id="buyerName" value="RAJMAN POWER" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">City</label>
-                        <input type="text" id="buyerCity" value="SUMERPUR" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
+    <header class="seller-header">
+      <input id="sellerName" class="seller-name"
+        value="SHAH BASTIMAL BABULAL AND COMPANY">
+      <input id="sellerType" class="seller-type"
+        value="GENERAL MERCHANT & COMMISSION AGENT">
+      <input id="sellerAddress" class="seller-address"
+        value="11, NEW KRISHI MANDI, SUMERPUR-306902 (RAJ.)">
+      <input id="sellerLicense" class="seller-license"
+        value="FSSAI Lic No. YOUR LICENSE NUMBER">
+    </header>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">GSTIN</label>
-                        <input type="text" id="buyerGstin" value="08AQMPP2308L1ZH" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Place of Supply</label>
-                        <input type="text" id="placeSupply" value="SUMERPUR" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
+    <div class="document-bar">
+      <strong>Credit Memo</strong>
+      <strong class="document-title">BILL OF SUPPLY</strong>
+      <span>Original / Duplicate / Triplicate</span>
+    </div>
 
-                <hr class="border-slate-100 my-1">
+    <section class="details-grid">
+      <div class="details-column">
+        <div class="field-row">
+          <label>Invoice No.</label><span>:</span>
+          <input id="invoiceNo" value="BB/26-27/673">
+        </div>
+        <div class="field-row">
+          <label>Date</label><span>:</span>
+          <input id="invoiceDate" type="date" value="2026-10-15">
+        </div>
+        <div class="field-row">
+          <label>Passing Date</label><span>:</span>
+          <input id="passingDate" type="date" value="2026-10-15">
+        </div>
+        <div class="field-row">
+          <label>Place of Supply</label><span>:</span>
+          <input id="placeSupply" value="Rajasthan (08)">
+        </div>
+        <div class="field-row">
+          <label>Reverse Charge</label><span>:</span>
+          <input id="reverseCharge" value="N">
+          <label class="due-label">Due Date</label>
+          <input id="dueDate" type="date" value="2026-10-16">
+        </div>
+      </div>
 
-                <!-- Commodity Calculations -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="col-span-2">
-                        <label class="block font-semibold text-slate-500 mb-0.5">Commodity</label>
-                        <input type="text" id="commodity" value="CHANA" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Bags</label>
-                        <input type="number" id="bags" value="120" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
+      <div class="details-column">
+        <div class="field-row">
+          <label>Transport Mode</label><span>:</span>
+          <input id="transportMode">
+        </div>
+        <div class="field-row">
+          <label>Vehicle Number</label><span>:</span>
+          <input id="vehicleNumber">
+        </div>
+        <div class="field-row">
+          <label>Date of Supply</label><span>:</span>
+          <input id="supplyDate" type="date" value="2026-10-15">
+          <label class="bilty-label">Bilty No.</label>
+          <input id="biltyNo">
+        </div>
+        <div class="field-row">
+          <label>Place of Supply</label><span>:</span>
+          <input id="deliveryPlace" value="SUMERPUR">
+        </div>
+        <div class="field-row">
+          <label>E Way Bill No.</label><span>:</span>
+          <input id="ewayBill">
+        </div>
+      </div>
+    </section>
 
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Total Weight (KGS)</label>
-                        <input type="number" id="weight" value="9761.00" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Rate (per 100 KGS)</label>
-                        <input type="number" id="rate" value="6955.00" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Truck Loading (₹)</label>
-                        <input type="number" id="loadingCharges" value="3394.39" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
+    <section class="party-grid">
+      <div class="party">
+        <h3>Details of Receiver / Billed To</h3>
+        <input id="buyerName" class="party-name" value="RAJMAN POWER">
+        <label>City - <input id="buyerCity" value="SUMERPUR"></label>
+        <label class="party-gstin">GSTIN : <input id="buyerGSTIN" value=""></label>
+        <textarea id="buyerAddress" placeholder="Buyer address"></textarea>
+      </div>
+      <div class="party">
+        <h3>Details of Consignee / Shipped To</h3>
+        <input id="shipName" class="party-name" value="RAJMAN POWER">
+        <label>City - <input id="shipCity" value="SUMERPUR"></label>
+        <label class="party-gstin">GSTIN : <input id="shipGSTIN" value=""></label>
+        <textarea id="shipAddress" placeholder="Shipping address"></textarea>
+      </div>
+    </section>
 
-                <hr class="border-slate-100 my-1">
+    <section class="goods-section">
+      <table id="goodsTable">
+        <colgroup>
+          <col style="width:4%">
+          <col style="width:27%">
+          <col style="width:8%">
+          <col style="width:6%">
+          <col style="width:11%">
+          <col style="width:5%">
+          <col style="width:11%">
+          <col style="width:7%">
+          <col style="width:14%">
+          <col class="action-col" style="width:7%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Sr.</th>
+            <th>Description of Goods</th>
+            <th>HSNC</th>
+            <th>Bags</th>
+            <th>Wt./QTY</th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Rate Per</th>
+            <th>Value</th>
+            <th class="no-print">Action</th>
+          </tr>
+        </thead>
+        <tbody id="goodsBody"></tbody>
+        <tfoot>
+          <tr class="subtotal-row">
+            <th colspan="3">Sub Total</th>
+            <th id="totalBags">0</th>
+            <th id="totalQty">0.00</th>
+            <th colspan="3"></th>
+            <th id="goodsSubtotal">0.00</th>
+            <th class="no-print"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
 
-                <!-- Mandi Tax Control -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Mandi Tax Rate (%)</label>
-                        <input type="number" id="mandiTaxRate" value="1.60" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-500 mb-0.5">Adhat / Comm (%)</label>
-                        <input type="number" id="adhatRate" value="2.25" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 focus:outline-emerald-500">
-                    </div>
-                </div>
-            </form>
+    <section class="bottom-section">
+      <div class="left-bottom">
+        <div class="charges-heading">Q. Charges</div>
+        <div class="charge-line">
+          <input id="chargeName" value="KKS" aria-label="Charge name">
+          <input id="chargeDescription" value="TRUCK LODING"
+            aria-label="Charge description">
+          <input id="loadingCharge" type="number" min="0" step="0.01"
+            value="3394.39" aria-label="Charge amount">
         </div>
 
-        <!-- RIGHT TRADING BILL DISPLAY PRINT AREA -->
-        <div class="xl:col-span-3 printable-bill bg-white text-[11px] leading-tight text-black border border-black p-6 mx-auto w-full max-w-[210mm]">
-            
-            <!-- Bill Header Block -->
-            <div class="flex justify-between items-start border-b border-black pb-2 text-right">
-                <div class="text-left">
-                    <p class="font-mono">GSTIN: 08BABPM7734Q1Z1</p>
-                    <p class="font-mono">PAN No: ABAPM7734Q</p>
-                </div>
-                <div>
-                    <p class="font-mono">Mob: 9414122964</p>
-                </div>
-            </div>
+        <div class="remarks">
+          <strong>Remarks :</strong>
+          <textarea id="remarks"></textarea>
+        </div>
 
-            <div class="text-center my-3">
-                <h1 class="text-xl font-bold tracking-wide">SHAH BASTIMAL BABULAL AND COMPANY</h1>
-                <p class="text-[10px] uppercase font-medium tracking-tight">General Merchant & Commission Agent</p>
-                <p class="text-[9px] text-gray-600">11, NEW KRISHI MANDI, SUMERPUR - 306902 (RAJ.) | FSSAI Lic No. 12221036000134</p>
-            </div>
+        <div class="bank">
+          <strong>Bank Details :</strong>
+          <input id="bankDetails"
+            value="ICICI BANK A/C No. YOUR ACCOUNT  * IFSC CODE : YOUR IFSC">
+        </div>
+      </div>
 
-            <div class="grid grid-cols-3 border-t border-b border-black text-center font-bold divide-x divide-black text-[10px] bg-gray-50 py-1">
-                <div>CREDIT MEMO</div>
-                <div>BILL OF SUPPLY</div>
-                <div>ORIGINAL / DUPLICATE</div>
-            </div>
+      <div class="right-bottom">
+        <div class="summary-row">
+          <span>Add / Less</span>
+          <span id="loadingDisplay">0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Mandi Tax <input id="mandiRate" type="number"
+            min="0" step="0.01" value="1.60">%</span>
+          <span id="mandiAmount">0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Adhat <input id="adhatRate" type="number"
+            min="0" step="0.01" value="2.25">%</span>
+          <span id="adhatAmount">0.00</span>
+        </div>
+        <div class="summary-row taxable-row">
+          <strong>Taxable Value</strong>
+          <strong id="taxableValue">0.00</strong>
+        </div>
+        <div class="summary-row">
+          <span>Add : SGST @ <input id="sgstRate" type="number"
+            min="0" step="0.01" value="0">%</span>
+          <span id="sgstAmount">-</span>
+        </div>
+        <div class="summary-row">
+          <span>Add : CGST @ <input id="cgstRate" type="number"
+            min="0" step="0.01" value="0">%</span>
+          <span id="cgstAmount">-</span>
+        </div>
+        <div class="summary-row">
+          <span>Add : IGST @ <input id="igstRate" type="number"
+            min="0" step="0.01" value="0">%</span>
+          <span id="igstAmount">-</span>
+        </div>
+        <div class="summary-row round-row">
+          <span>Round off</span>
+          <span id="roundOff">0.00</span>
+        </div>
+        <div class="net-row">
+          <strong>Net Amount</strong>
+          <strong id="netAmount">0.00</strong>
+        </div>
+      </div>
+    </section>
 
-            <!-- Ledger Meta Breakdown Matrix -->
-            <div class="grid grid-cols-2 border-b border-black text-xs divide-x divide-black">
-                <div class="p-2 space-y-1">
-                    <p><span class="font-semibold">Invoice No:</span> <span id="lblInvoiceNo">--</span></p>
-                    <p><span class="font-semibold">Date:</span> <span id="lblDate">--</span></p>
-                    <p><span class="font-semibold">Place of Supply:</span> <span id="lblPlaceSupply">--</span></p>
-                    <p><span class="font-semibold">Reverse Charge:</span> N</p>
-                </div>
-                <div class="p-2 space-y-1">
-                    <p><span class="font-semibold">Transport Mode:</span> Road Truck</p>
-                    <p><span class="font-semibold">Date of Supply:</span> <span id="lblSupplyDate">--</span></p>
-                    <p><span class="font-semibold">Place of Supply:</span> SUMERPUR</p>
-                </div>
-            </div>
+    <div class="amount-words">
+      <strong>Rs.: <span id="amountWords">Zero Only</span></strong>
+    </div>
 
-            <!-- Client Address Sections -->
-            <div class="grid grid-cols-2 border-b border-black divide-x divide-black min-h-[50px]">
-                <div class="p-2">
-                    <p class="font-bold text-[10px] uppercase text-gray-500 tracking-wider mb-0.5">Details of Receiver / Billed To</p>
-                    <p id="lblBuyerName" class="font-bold text-slate-900"></p>
-                    <p>City: <span id="lblBuyerCity"></span></p>
-                    <p class="font-mono mt-1">GSTIN: <span id="lblBuyerGstin"></span></p>
-                </div>
-                <div class="p-2">
-                    <p class="font-bold text-[10px] uppercase text-gray-500 tracking-wider mb-0.5">Details of Consignee / Shipped To</p>
-                    <p id="lblShipName" class="font-bold text-slate-900"></p>
-                    <p>City: <span id="lblShipCity"></span></p>
-                    <p class="font-mono mt-1">GSTIN: <span id="lblShipGstin"></span></p>
-                </div>
-            </div>
+    <footer class="invoice-footer">
+      <div class="terms">
+        <p>* Note : Interest will be charged 21% after 7 day.</p>
+        <p>* WARRANTY : We hereby certify that the goods mentioned in this invoice are warranted to be the same in nature, substance and quality as demanded by the vendor.</p>
+        <p>* Subject to Sumerpur Jurisdiction.</p>
+      </div>
+      <div class="signature">
+        <strong>For :- <span id="signatureName">SHAH BASTIMAL BABULAL AND COMPANY</span></strong>
+        <div class="stamp-space">Authorized Signatory</div>
+      </div>
+    </footer>
 
-            <!-- Main Items Mandi Commodity Grid Table -->
-            <table class="w-full border-b border-black text-left text-[11px] border-collapse">
-                <thead>
+    <div class="eoe">E &amp; O E</div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
