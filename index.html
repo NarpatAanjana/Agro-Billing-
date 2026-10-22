@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,38 +7,37 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
- 
-<div class="toolbar no-print">
-  <strong>Trading Invoice System</strong>
-  <button type="button" onclick="newBill()">+ New Bill</button>
-  <button type="button" onclick="addItem()">+ Add Item</button>
-  <button type="button" onclick="saveBill()">Save Bill</button>
-  <select id="savedBills" aria-label="Saved bills">
-    <option value="">Open Saved Bill...</option>
-  </select>
-  <button type="button" onclick="loadSelectedBill()">Open</button>
-  <button type="button" onclick="toggleSalesRegister()">Sales Register</button>
-  <button type="button" onclick="exportSalesCSV()">Export Sales CSV</button>
-  <button type="button" onclick="window.print()">Print Invoice</button>
-</div>
-
-<section id="salesRegister" class="sales-register no-print" hidden>
-  <h2>Sales Register</h2>
-  <p>Total saved sales: <strong id="salesGrandTotal">₹0.00</strong></p>
-  <div class="register-scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Invoice No.</th>
-          <th>Purchaser</th>
-          <th>Sale Amount (₹)</th>
-        </tr>
-      </thead>
-      <tbody id="salesRegisterBody"></tbody>
-    </table>
+  <div class="toolbar no-print">
+    <strong>Trading Invoice System</strong>
+    <button type="button" onclick="newBill()">+ New Bill</button>
+    <button type="button" onclick="addItem()">+ Add Item</button>
+    <button type="button" onclick="saveBill()">Save Bill</button>
+    <select id="savedBills" aria-label="Saved bills">
+      <option value="">Open Saved Bill...</option>
+    </select>
+    <button type="button" onclick="loadSelectedBill()">Open</button>
+    <button type="button" onclick="toggleSalesRegister()">Sales Register</button>
+    <button type="button" onclick="exportSalesCSV()">Export Sales CSV</button>
+    <button type="button" onclick="window.print()">Print Invoice</button>
   </div>
-</section>
+
+  <section id="salesRegister" class="sales-register no-print" hidden>
+    <h2>Sales Register</h2>
+    <p>Total saved sales: <strong id="salesGrandTotal">₹0.00</strong></p>
+    <div class="register-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Invoice No.</th>
+            <th>Purchaser</th>
+            <th>Sale Amount (₹)</th>
+          </tr>
+        </thead>
+        <tbody id="salesRegisterBody"></tbody>
+      </table>
+    </div>
+  </section>
 
   <main class="invoice">
     <div class="top-strip">
@@ -51,14 +49,10 @@
     </div>
 
     <header class="seller-header">
-      <input id="sellerName" class="seller-name"
-        value="Vishwa Sales Corporation">
-      <input id="sellerType" class="seller-type"
-        value="GENERAL MERCHANT & COMMISSION AGENT">
-      <input id="sellerAddress" class="seller-address"
-        value="135, NEW KRISHI MANDI, SUMERPUR-306902 (RAJ.)">
-      <input id="sellerLicense" class="seller-license"
-        value="FSSAI Lic No. YOUR LICENSE NUMBER">
+      <input id="sellerName" class="seller-name" value="Vishwa Sales Corporation">
+      <input id="sellerType" class="seller-type" value="GENERAL MERCHANT &amp; COMMISSION AGENT">
+      <input id="sellerAddress" class="seller-address" value="135, NEW KRISHI MANDI, SUMERPUR-306902 (RAJ.)">
+      <input id="sellerLicense" class="seller-license" value="FSSAI Lic No. YOUR LICENSE NUMBER">
     </header>
 
     <div class="document-bar">
@@ -69,53 +63,24 @@
 
     <section class="details-grid">
       <div class="details-column">
+        <div class="field-row"><label>Invoice No.</label><span>:</span><input id="invoiceNo" value=""></div>
+        <div class="field-row"><label>Date</label><span>:</span><input id="invoiceDate" type="date" value=""></div>
+        <div class="field-row"><label>Passing Date</label><span>:</span><input id="passingDate" type="date" value=""></div>
+        <div class="field-row"><label>Place of Supply</label><span>:</span><input id="placeSupply" value="Rajasthan (08)"></div>
         <div class="field-row">
-          <label>Invoice No.</label><span>:</span>
-          <input id="invoiceNo" value="">
-        </div>
-        <div class="field-row">
-          <label>Date</label><span>:</span>
-          <input id="invoiceDate" type="date" value="">
-        </div>
-        <div class="field-row">
-          <label>Passing Date</label><span>:</span>
-          <input id="passingDate" type="date" value="">
-        </div>
-        <div class="field-row">
-          <label>Place of Supply</label><span>:</span>
-          <input id="placeSupply" value="Rajasthan (08)">
-        </div>
-        <div class="field-row">
-          <label>Reverse Charge</label><span>:</span>
-          <input id="reverseCharge" value="NA">
-          <label class="due-label">Due Date</label>
-          <input id="dueDate" type="date" value="2026-10-16">
+          <label>Reverse Charge</label><span>:</span><input id="reverseCharge" value="NA">
+          <label class="due-label">Due Date</label><input id="dueDate" type="date" value="">
         </div>
       </div>
-
       <div class="details-column">
+        <div class="field-row"><label>Transport Mode</label><span>:</span><input id="transportMode"></div>
+        <div class="field-row"><label>Vehicle Number</label><span>:</span><input id="vehicleNumber"></div>
         <div class="field-row">
-          <label>Transport Mode</label><span>:</span>
-          <input id="transportMode">
+          <label>Date of Supply</label><span>:</span><input id="supplyDate" type="date" value="">
+          <label class="bilty-label">Bilty No.</label><input id="biltyNo">
         </div>
-        <div class="field-row">
-          <label>Vehicle Number</label><span>:</span>
-          <input id="vehicleNumber">
-        </div>
-        <div class="field-row">
-          <label>Date of Supply</label><span>:</span>
-          <input id="supplyDate" type="date" value="2026-10-15">
-          <label class="bilty-label">Bilty No.</label>
-          <input id="biltyNo">
-        </div>
-        <div class="field-row">
-          <label>Place of Supply</label><span>:</span>
-          <input id="deliveryPlace" value="SUMERPUR">
-        </div>
-        <div class="field-row">
-          <label>E Way Bill No.</label><span>:</span>
-          <input id="ewayBill">
-        </div>
+        <div class="field-row"><label>Place of Supply</label><span>:</span><input id="deliveryPlace" value="SUMERPUR"></div>
+        <div class="field-row"><label>E Way Bill No.</label><span>:</span><input id="ewayBill"></div>
       </div>
     </section>
 
@@ -140,41 +105,26 @@
       <table id="goodsTable">
         <colgroup>
           <col style="width:4%">
-          <col style="width:27%">
+          <col style="width:22%">
           <col style="width:8%">
           <col style="width:6%">
-          <col style="width:11%">
+          <col style="width:10%">
           <col style="width:5%">
-          <col style="width:11%">
+          <col style="width:10%">
           <col style="width:7%">
           <col style="width:14%">
           <col class="action-col" style="width:7%">
         </colgroup>
-        <thead>
-          <tr>
-            <th>Sr.</th>
-            <th>Description of Goods</th>
-            <th>HSNC</th>
-            <th>Bags</th>
-            <th>Wt./QTY</th>
-            <th>Unit</th>
-            <th>Rate</th>
-            <th>Rate Per</th>
-            <th>Value</th>
-            <th class="no-print">Action</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th>Sr.</th><th>Description of Goods</th><th>HSNC</th><th>Bags</th>
+          <th>Wt./QTY</th><th>Unit</th><th>Rate</th><th>Rate Per</th><th>Value</th>
+          <th class="no-print">Action</th>
+        </tr></thead>
         <tbody id="goodsBody"></tbody>
-        <tfoot>
-          <tr class="subtotal-row">
-            <th colspan="3">Sub Total</th>
-            <th id="totalBags">0</th>
-            <th id="totalQty">0.00</th>
-            <th colspan="3"></th>
-            <th id="goodsSubtotal">0.00</th>
-            <th class="no-print"></th>
-          </tr>
-        </tfoot>
+        <tfoot><tr class="subtotal-row">
+          <th colspan="3">Sub Total</th><th id="totalBags">0</th><th id="totalQty">0.00</th>
+          <th colspan="3"></th><th id="goodsSubtotal">0.00</th><th class="no-print"></th>
+        </tr></tfoot>
       </table>
     </section>
 
@@ -183,78 +133,28 @@
         <div class="charges-heading">Q. Charges</div>
         <div class="charge-line">
           <input id="chargeName" value="KKS" aria-label="Charge name">
-          <input id="chargeDescription" value="TRUCK LODING"
-            aria-label="Charge description">
-          <input id="loadingCharge" type="number" min="0" step="0.01"
-            value="3394.39" aria-label="Charge amount">
+          <input id="chargeDescription" value="TRUCK LODING" aria-label="Charge description">
+          <input id="loadingCharge" type="number" min="0" step="0.01" value="3394.39" aria-label="Charge amount">
         </div>
-
-        <div class="remarks">
-          <strong>Remarks :</strong>
-          <textarea id="remarks"></textarea>
-        </div>
-
-        <div class="bank">
-          <strong>Bank Details :</strong>
-          <input id="bankDetails"
-            value="ICICI BANK A/C No. YOUR ACCOUNT  * IFSC CODE : YOUR IFSC">
-        </div>
+        <div class="remarks"><strong>Remarks :</strong><textarea id="remarks"></textarea></div>
+        <div class="bank"><strong>Bank Details :</strong><input id="bankDetails" value="ICICI BANK A/C No. YOUR ACCOUNT  * IFSC CODE : YOUR IFSC"></div>
       </div>
 
       <div class="right-bottom">
-        <div class="summary-row">
-          <span>Add / Less</span>
-          <span id="loadingDisplay">0.00</span>
-        </div>
-        <div class="summary-row">
-          <span>Mandi Tax <input id="mandiRate" type="number"
-            min="0" step="0.01" value="1.60">%</span>
-          <span id="mandiAmount">0.00</span>
-        </div>
-        <div class="summary-row">
-          <span>Adhat <input id="adhatRate" type="number"
-            min="0" step="0.01" value="2.25">%</span>
-          <span id="adhatAmount">0.00</span>
-        </div>
-        <div class="summary-row">
-          <span>KKS Tax <input id="kksRate" type="number"
-            min="0" step="0.01" value="0">%</span>
-          <span id="kksAmount">0.00</span>
-        </div>
-        <div class="summary-row taxable-row">
-          <strong>Taxable Value</strong>
-          <strong id="taxableValue">0.00</strong>
-        </div>
-        <div class="summary-row">
-          <span>Add : SGST @ <input id="sgstRate" type="number"
-            min="0" step="0.01" value="0">%</span>
-          <span id="sgstAmount">-</span>
-        </div>
-        <div class="summary-row">
-          <span>Add : CGST @ <input id="cgstRate" type="number"
-            min="0" step="0.01" value="0">%</span>
-          <span id="cgstAmount">-</span>
-        </div>
-        <div class="summary-row">
-          <span>Add : IGST @ <input id="igstRate" type="number"
-            min="0" step="0.01" value="0">%</span>
-          <span id="igstAmount">-</span>
-        </div>
-        <div class="summary-row round-row">
-          <span>Round off</span>
-          <span id="roundOff">0.00</span>
-        </div>
-        <div class="net-row">
-          <strong>Net Amount</strong>
-          <strong id="netAmount">0.00</strong>
-        </div>
+        <div class="summary-row"><span>Add / Less</span><span id="loadingDisplay">0.00</span></div>
+        <div class="summary-row"><span>Mandi Tax <input id="mandiRate" type="number" min="0" step="0.01" value="1.60">%</span><span id="mandiAmount">0.00</span></div>
+        <div class="summary-row"><span>Adhat <input id="adhatRate" type="number" min="0" step="0.01" value="2.25">%</span><span id="adhatAmount">0.00</span></div>
+        <div class="summary-row"><span>KKS Tax <input id="kksRate" type="number" min="0" step="0.01" value="0">%</span><span id="kksAmount">0.00</span></div>
+        <div class="summary-row taxable-row"><strong>Taxable Value</strong><strong id="taxableValue">0.00</strong></div>
+        <div class="summary-row"><span>Add : SGST @ <input id="sgstRate" type="number" min="0" step="0.01" value="0">%</span><span id="sgstAmount">-</span></div>
+        <div class="summary-row"><span>Add : CGST @ <input id="cgstRate" type="number" min="0" step="0.01" value="0">%</span><span id="cgstAmount">-</span></div>
+        <div class="summary-row"><span>Add : IGST @ <input id="igstRate" type="number" min="0" step="0.01" value="0">%</span><span id="igstAmount">-</span></div>
+        <div class="summary-row round-row"><span>Round off</span><span id="roundOff">0.00</span></div>
+        <div class="net-row"><strong>Net Amount</strong><strong id="netAmount">0.00</strong></div>
       </div>
     </section>
 
-    <div class="amount-words">
-      <strong>Rs.: <span id="amountWords">Zero Only</span></strong>
-    </div>
-
+    <div class="amount-words"><strong>Rs.: <span id="amountWords">Zero Only</span></strong></div>
     <footer class="invoice-footer">
       <div class="terms">
         <p>* Note : Interest will be charged 21% after 7 day.</p>
@@ -262,14 +162,12 @@
         <p>* Subject to Sumerpur Jurisdiction.</p>
       </div>
       <div class="signature">
-        <strong>For :- <span id="signatureName">SHAH BASTIMAL BABULAL AND COMPANY</span></strong>
+        <strong>For :- <span id="signatureName">Vishwa Sales Corporation</span></strong>
         <div class="stamp-space">Authorized Signatory</div>
       </div>
     </footer>
-
     <div class="eoe">E &amp; O E</div>
   </main>
-
   <script src="script.js"></script>
 </body>
 </html>
