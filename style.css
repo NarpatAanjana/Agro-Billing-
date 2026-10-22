@@ -1,603 +1,283 @@
+* { box-sizing: border-box; }
 
-* {
-  box-sizing: border-box;
+:root {
+  --ink: #222;
+  --line: #333;
+  --muted: #f1f1f1;
 }
 
 body {
   margin: 0;
-  background: #e7e7e7;
-  color: #222;
+  padding: 12px;
+  color: var(--ink);
+  background: #e9ecef;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .toolbar {
-  max-width: 1000px;
-  margin: 16px auto;
-  padding: 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 auto 12px;
+  padding: 10px;
+  max-width: 210mm;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+.toolbar strong { margin-right: auto; font-size: 15px; }
+button, select {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid #9ca3af;
+  border-radius: 4px;
+  background: #fff;
+  color: #111;
+}
+button { cursor: pointer; }
+button:hover { background: #f3f4f6; }
+.remove-item { padding: 1px 6px; min-width: 22px; color: #8b0000; }
+
+.sales-register {
+  max-width: 210mm;
+  margin: 0 auto 12px;
+  padding: 12px;
   background: white;
+  border: 1px solid #c7c7c7;
 }
-
-.toolbar strong {
-  margin-right: auto;
-  font-size: 16px;
-}
-
-.toolbar button {
-  padding: 9px 14px;
-  border: 1px solid #777;
-  background: #f5f5f5;
-  cursor: pointer;
-}
+.sales-register h2 { margin: 0 0 8px; font-size: 18px; }
+.register-scroll { overflow-x: auto; }
+.sales-register table { width: 100%; border-collapse: collapse; }
+.sales-register th, .sales-register td { padding: 7px; border: 1px solid #aaa; text-align: left; }
+.sales-register th { background: #f0f0f0; }
+.sales-register .numeric { text-align: right; white-space: nowrap; }
+.empty-register { text-align: center !important; color: #666; }
 
 .invoice {
   width: 210mm;
   min-height: 297mm;
-  margin: 0 auto 24px;
-  padding: 8mm 7mm 6mm;
-  background: white;
-  border: 1px solid #aaa;
+  margin: 0 auto;
+  padding: 7mm;
+  background: #fff;
+  border: 1px solid #c9c9c9;
+  box-shadow: 0 2px 8px #00000018;
+  font-size: 10px;
 }
 
-input,
-textarea {
-  width: 100%;
-  min-width: 0;
-  padding: 1px 3px;
-  color: inherit;
+input, textarea, select {
   font: inherit;
-  background: transparent;
-  border: 1px solid transparent;
+  color: inherit;
+}
+.invoice input, .invoice textarea {
+  min-width: 0;
+  width: 100%;
+  padding: 2px 3px;
+  border: 0;
+  border-bottom: 1px dotted #888;
   border-radius: 0;
+  background: transparent;
+  outline-color: #7aa7df;
 }
-
-textarea {
-  resize: vertical;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #999;
-  outline: none;
-}
-
+.invoice textarea { resize: vertical; }
+.invoice label { display: inline-flex; align-items: center; gap: 3px; }
 .top-strip {
-  min-height: 12mm;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  padding: 2px 5px;
-  border: 1px solid #777;
-  font-weight: bold;
-}
-
-.top-strip > div {
-  width: 60%;
-}
-
-.top-strip label {
-  display: flex;
   align-items: center;
-  max-width: 100%;
+  gap: 8px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--line);
 }
-
-.top-strip input {
-  font-weight: bold;
-}
-
-.top-strip .mobile {
-  width: 30%;
-  justify-content: flex-end;
-}
+.top-strip > div { display: flex; gap: 12px; }
+.top-strip label { white-space: nowrap; }
+.top-strip input { width: 95px; }
+.top-strip .mobile input { width: 90px; }
 
 .seller-header {
-  min-height: 24mm;
-  padding: 5px;
-  text-align: center;
-  border: 1px solid #777;
-  border-top: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.seller-name {
+  align-items: center;
+  gap: 2px;
+  padding: 5px 0 7px;
   text-align: center;
-  font-size: 19px;
-  font-weight: 800;
-  text-transform: uppercase;
 }
-
-.seller-type,
-.seller-address,
-.seller-license {
-  text-align: center;
-  font-size: 11px;
-}
+.seller-header input { width: 100%; text-align: center; border: 0; }
+.seller-header .seller-name { font-weight: 700; font-size: 21px; }
+.seller-header .seller-type { font-weight: 700; font-size: 12px; }
+.seller-header .seller-address { font-size: 11px; }
+.seller-header .seller-license { font-size: 10px; }
 
 .document-bar {
-  min-height: 7mm;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1.4fr 1fr;
   align-items: center;
-  padding: 2px 4px;
-  border: 1px solid #777;
-  border-top: 0;
-}
-
-.document-title {
-  text-align: center;
-  text-decoration: underline;
-}
-
-.document-bar > span {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid #777;
-  border-top: 0;
-}
-
-.details-column {
-  padding: 7px 5px;
-  min-width: 0;
-}
-
-.details-column + .details-column {
-  border-left: 1px solid #777;
-}
-
-.field-row {
-  min-height: 6mm;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.field-row > label:first-child {
-  width: 36%;
-  flex-shrink: 0;
-}
-
-.field-row > span {
-  flex-shrink: 0;
-}
-
-.field-row > input {
-  flex: 1;
-}
-
-.field-row .due-label,
-.field-row .bilty-label {
-  width: auto;
-  flex-shrink: 0;
-  margin-left: 4px;
-}
-
-.party-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid #777;
-  border-top: 0;
-}
-
-.party {
-  min-width: 0;
-  min-height: 34mm;
-  position: relative;
-  padding: 5px 7px 19px;
-}
-
-.party + .party {
-  border-left: 1px solid #777;
-}
-
-.party h3 {
-  margin: -5px -7px 6px;
-  padding: 4px;
-  text-align: center;
-  font-size: 11px;
-  border-bottom: 1px solid #777;
-}
-
-.party-name {
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.party > label {
-  display: flex;
-  align-items: center;
-  margin-top: 4px;
-}
-
-.party > label input {
-  flex: 1;
-}
-
-.party-gstin {
-  position: absolute;
-  bottom: 2px;
-  left: 7px;
-  right: 7px;
-  font-weight: bold;
-}
-
-.party textarea {
-  min-height: 18px;
-}
-
-.goods-section {
-  width: 100%;
-}
-
-#goodsTable {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-#goodsTable th,
-#goodsTable td {
-  padding: 4px 2px;
-  border: 1px solid #777;
-  overflow-wrap: anywhere;
-  vertical-align: top;
-}
-
-#goodsTable th {
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-#goodsTable td {
-  text-align: right;
-}
-
-#goodsTable td:nth-child(2) {
-  text-align: left;
-}
-
-#goodsTable tbody tr {
-  height: 72mm;
-}
-
-#goodsTable tbody input,
-#goodsTable tbody select {
-  width: 100%;
-  padding: 2px 0;
-  border: 1px solid transparent;
-  text-align: right;
-  font-size: 10px;
-}
-
-#goodsTable tbody td:nth-child(2) input {
-  text-align: left;
-}
-
-#goodsTable tfoot th {
-  height: 6mm;
-  vertical-align: middle;
-}
-
-#goodsTable .action-col {
-  width: 7%;
-}
-
-.remove-item {
-  padding: 2px;
-  border: 0;
-  background: #eee;
-  cursor: pointer;
-}
-
-.bottom-section {
-  display: grid;
-  grid-template-columns: 2fr 1.08fr;
-  border: 1px solid #777;
-  border-top: 0;
-}
-
-.left-bottom {
-  min-width: 0;
-  border-right: 1px solid #777;
-}
-
-.charges-heading {
-  padding: 6px;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.charge-line {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 0.7fr;
-  align-items: center;
-  padding: 2px 8px 8px;
   gap: 4px;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  background: #f4f4f4;
 }
+.document-bar > :first-child { text-align: left; }
+.document-bar .document-title { text-align: center; font-size: 13px; }
+.document-bar > :last-child { text-align: right; font-size: 9px; }
 
-.charge-line input:last-child {
-  text-align: right;
-}
-
-.remarks {
-  min-height: 20mm;
-  padding: 7px;
-  border-top: 1px solid #777;
-}
-
-.remarks textarea {
-  min-height: 12mm;
-}
-
-.bank {
-  min-height: 15mm;
-  padding: 6px;
-  border-top: 1px solid #777;
-}
-
-.bank strong {
-  display: block;
-  margin-bottom: 3px;
-  text-decoration: underline;
-}
-
-.bank input {
-  font-weight: bold;
-}
-
-.right-bottom {
-  min-width: 0;
-}
-
-.summary-row {
-  min-height: 7mm;
-  display: grid;
-  grid-template-columns: 58% 42%;
-  align-items: center;
-  border-bottom: 1px solid #aaa;
-}
-
-.summary-row > span {
-  padding: 4px;
-}
-
-.summary-row > span + span {
-  text-align: right;
-  border-left: 1px solid #aaa;
-}
-
-.summary-row input {
-  display: inline-block;
-  width: 32px;
-  padding: 0;
-  text-align: right;
-}
-
-.taxable-row {
-  font-weight: bold;
-}
-
-.round-row {
-  min-height: 12mm;
-}
-
-.net-row {
-  min-height: 10mm;
-  display: grid;
-  grid-template-columns: 58% 42%;
-  align-items: center;
-  font-size: 14px;
-  border-top: 1px solid #777;
-}
-
-.net-row > * {
-  padding: 5px;
-}
-
-.net-row strong:last-child {
-  text-align: right;
-  border-left: 1px solid #777;
-}
-
-.amount-words {
-  min-height: 8mm;
-  padding: 6px;
-  border: 1px solid #777;
-  border-top: 0;
-}
-
-.invoice-footer {
-  min-height: 26mm;
+.details-grid, .party-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  padding: 6px;
-  border: 1px solid #777;
+  border: 1px solid var(--line);
   border-top: 0;
+  padding: 5px;
 }
-
-.terms p {
-  margin: 3px 0 7px;
-  line-height: 1.35;
+.details-column { min-width: 0; }
+.field-row {
+  display: grid;
+  grid-template-columns: 88px 7px minmax(40px, 1fr);
+  align-items: center;
+  gap: 3px;
+  min-height: 21px;
 }
+.field-row > label:first-child { white-space: nowrap; }
+.field-row input { min-width: 0; }
+.field-row .due-label, .field-row .bilty-label { margin-left: 3px; white-space: nowrap; }
+.field-row:has(.due-label) { grid-template-columns: 82px 7px minmax(25px, 1fr) 48px 78px; }
+.field-row:has(.bilty-label) { grid-template-columns: 83px 7px minmax(25px, 1fr) 42px 60px; }
 
-.signature {
+.party { min-width: 0; }
+.party h3 {
+  margin: 0 0 4px;
+  padding: 4px;
+  border-bottom: 1px solid #777;
+  text-align: center;
+  font-size: 10px;
+}
+.party .party-name { font-weight: 700; }
+.party > label { margin: 2px 5px 2px 0; }
+.party > label input { width: 85px; }
+.party .party-gstin input { width: 120px; }
+.party textarea { display: block; width: 100%; height: 31px; border: 1px dotted #aaa; }
+
+.goods-section { margin-top: 6px; }
+#goodsTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 9px;
+}
+#goodsTable th, #goodsTable td {
+  border: 1px solid var(--line);
+  padding: 2px 3px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+#goodsTable thead th {
+  text-align: center;
+  height: 25px;
+  background: #f1f1f1;
+  font-weight: 700;
+}
+#goodsTable tbody tr { height: 0; }
+#goodsTable tbody td { height: 21px; }
+#goodsTable tbody input {
+  display: block;
+  height: 17px;
+  padding: 1px 2px;
+  border: 0;
+  background: transparent;
+  font-size: 9px;
+}
+#goodsTable .serial, #goodsTable .value { text-align: right; white-space: nowrap; }
+#goodsTable .subtotal-row th { background: #f4f4f4; height: 23px; }
+#goodsTable .action-col { width: 7%; }
+
+.bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 0.92fr;
+  gap: 8px;
+  margin-top: 7px;
+  align-items: start;
+}
+.left-bottom, .right-bottom { min-width: 0; }
+.charges-heading { padding: 4px; font-weight: 700; background: #f1f1f1; border: 1px solid #444; }
+.charge-line { display: grid; grid-template-columns: 22% 1fr 28%; gap: 4px; padding: 4px 0; }
+.charge-line input { border: 1px solid #aaa; padding: 3px; }
+.remarks { margin-top: 5px; }
+.remarks textarea { display: block; width: 100%; height: 42px; border: 1px solid #aaa; margin-top: 3px; }
+.bank { margin-top: 6px; }
+.bank input { margin-top: 3px; border: 1px solid #aaa; }
+
+.summary-row, .net-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  text-align: right;
-}
-
-.signature-space {
-  min-height: 20mm;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  font-weight: bold;
-}
-
-.eoe {
+  gap: 8px;
+  min-height: 22px;
   padding: 3px 5px;
+  border: 1px solid #777;
+  border-bottom: 0;
+}
+.summary-row:last-child { border-bottom: 1px solid #777; }
+.summary-row > span:first-child { min-width: 0; }
+.summary-row > span:last-child, .summary-row > strong:last-child { text-align: right; white-space: nowrap; }
+.summary-row input {
+  width: 45px;
   text-align: right;
+  border: 1px solid #aaa;
+  padding: 1px 2px;
+}
+.taxable-row { background: #f2f2f2; }
+.round-row { border-bottom: 1px solid #777; }
+.net-row { min-height: 27px; border: 1px solid #222; background: #eee; font-size: 11px; }
+
+.amount-words {
+  margin-top: 6px;
+  padding: 5px;
+  border: 1px solid #555;
+  overflow-wrap: anywhere;
+}
+.invoice-footer {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 10px;
+  margin-top: 9px;
+  align-items: end;
+}
+.terms p { margin: 3px 0; line-height: 1.25; }
+.signature { text-align: center; min-height: 85px; display: flex; flex-direction: column; justify-content: space-between; }
+.stamp-space { min-height: 52px; padding-top: 30px; border-top: 0; }
+.eoe { margin-top: 4px; text-align: right; font-style: italic; }
+
+[hidden] { display: none !important; }
+
+@media (max-width: 850px) {
+  body { padding: 5px; }
+  .invoice { margin: 0; }
+  .toolbar { align-items: stretch; }
+  .toolbar strong { width: 100%; }
 }
 
-/* A4 print output */
-@page {
-  size: A4 portrait;
-  margin: 5mm;
-}
-
+@page { size: A4 portrait; margin: 7mm; }
 @media print {
-  body {
-    background: white;
-    font-size: 10px;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
+  body { margin: 0; padding: 0; background: #fff; }
+  .no-print { display: none !important; }
   .invoice {
-    width: 100%;
+    width: auto;
     min-height: 0;
     margin: 0;
     padding: 0;
     border: 0;
+    box-shadow: none;
+    font-size: 9px;
   }
-
-  input,
-  textarea {
-    border-color: transparent !important;
-    outline: none !important;
-    resize: none;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-
-  #goodsTable tbody tr {
-    height: 72mm;
-  }
-
-  .top-strip,
-  .seller-header,
-  .document-bar,
-  .details-grid,
-  .party-grid,
-  #goodsTable,
-  .bottom-section,
-  .amount-words,
-  .invoice-footer {
-    break-inside: avoid;
-  }
-
-  #goodsTable thead,
-  #goodsTable tfoot {
-    display: table-row-group;
-  }
-
-  .remove-item {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 760px) {
-  .invoice {
-    width: 100%;
-    padding: 8px;
-    overflow-x: auto;
-  }
-
-  .seller-name {
-    font-size: 15px;
-  }
-
-  .document-bar {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .document-title,
-  .document-bar > span {
-    text-align: left;
-  }
-
-  .details-grid,
-  .party-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .details-column + .details-column,
-  .party + .party {
-    border-left: 0;
-    border-top: 1px solid #777;
-  }
-
-  .goods-section {
-    overflow-x: auto;
-  }
-
-  #goodsTable {
-    min-width: 720px;
-  }
-
-  .bottom-section {
-    grid-template-columns: 1fr;
-  }
-
-  .left-bottom {
-    border-right: 0;
-    border-bottom: 1px solid #777;
-  }
-}
-
-/* Invoice toolbar controls */
-.toolbar {
-  flex-wrap: wrap;
-}
-
-.toolbar button,
-.toolbar select {
-  padding: 8px 10px;
-  border: 1px solid #777;
-  background: #f5f5f5;
-  color: #222;
-  font: inherit;
-  cursor: pointer;
-}
-
-.toolbar select {
-  max-width: 190px;
-}
-
-/* Match the class used in index.html */
-.stamp-space {
-  min-height: 20mm;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  font-weight: bold;
-}
-
-/* Keep editing controls out of printed bills */
-@media print {
-  .toolbar,
-  .no-print {
-    display: none !important;
-  }
-
-  #goodsTable tbody tr {
-    height: 72mm;
-  }
+  #goodsTable tbody tr { height: 0 !important; }
+  #goodsTable tbody td { height: 19px; padding: 1px 2px; }
+  #goodsTable tbody input { height: 16px; font-size: 8.5px; }
+  input, textarea { color: #000 !important; }
+  .invoice input, .invoice textarea { outline: none; }
+  .toolbar, .sales-register { display: none !important; }
+  .details-grid, .party-grid, .bottom-section, .invoice-footer { break-inside: avoid; }
+  #goodsTable { break-inside: auto; }
+  #goodsTable tr { break-inside: avoid; }
+  button { display: none !important; }
 }
