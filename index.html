@@ -68,7 +68,7 @@
         </div>
         <div class="field-row">
           <label>Reverse Charge</label><span>:</span>
-          <input id="reverseCharge" value="N">
+          <input id="reverseCharge" value="NA">
           <label class="due-label">Due Date</label>
           <input id="dueDate" type="date" value="2026-10-16">
         </div>
@@ -196,6 +196,11 @@
           <span>Adhat <input id="adhatRate" type="number"
             min="0" step="0.01" value="2.25">%</span>
           <span id="adhatAmount">0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>KKS Tax <input id="kksRate" type="number"
+            min="0" step="0.01" value="0">%</span>
+          <span id="kksAmount">0.00</span>
         </div>
         <div class="summary-row taxable-row">
           <strong>Taxable Value</strong>
