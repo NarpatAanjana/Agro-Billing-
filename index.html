@@ -14,13 +14,32 @@
   <button type="button" onclick="newBill()">+ New Bill</button>
   <button type="button" onclick="addItem()">+ Add Item</button>
   <button type="button" onclick="saveBill()">Save Bill</button>
-  <select id="savedBills" aria-label="Open a saved bill">
+  <select id="savedBills" aria-label="Saved bills">
     <option value="">Open Saved Bill...</option>
   </select>
   <button type="button" onclick="loadSelectedBill()">Open</button>
+  <button type="button" onclick="toggleSalesRegister()">Sales Register</button>
+  <button type="button" onclick="exportSalesCSV()">Export Sales CSV</button>
   <button type="button" onclick="window.print()">Print Invoice</button>
 </div>
 
+<section id="salesRegister" class="sales-register no-print" hidden>
+  <h2>Sales Register</h2>
+  <p>Total saved sales: <strong id="salesGrandTotal">₹0.00</strong></p>
+  <div class="register-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Invoice No.</th>
+          <th>Purchaser</th>
+          <th>Sale Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="salesRegisterBody"></tbody>
+    </table>
+  </div>
+</section>
 
   <main class="invoice">
     <div class="top-strip">
